@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title> Cocina: NombreEmpresa </title>
+
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+	
+	<div class="container">
+		
+		<header class="row text-center">
+			<h1> Lista de pedidos. </h1>
+			<hr>
+		</header>
+
+		<section class="row">
+			
+			<!--
+			<article class="col-lg-6">					
+					
+				<div class="panel panel-default">
+				  <div class="panel-heading">
+				    <h3 class="panel-title text-center">Mesa 1</h3>
+				  </div>
+				  <div class="panel-body">
+					<ul class="list-group">
+
+						<li class="list-group-item"><span class="badge">3</span> <strong>Sopa: fideos</strong>  
+							<br> <span> Notas: </span> 
+						</li>
+
+						<li class="list-group-item"><span class="badge">5</span> <strong>Sopa: nombre</strong>  
+							<br><span> Notas: </span>
+						</li>
+
+						<li class="list-group-item"><span class="badge">3</span> <strong>Gaseosa: cocacola</strong>  
+							<br><span> Notas: una de las gaseosas bien fria y con 40 hielos, 75 pitillos y light sacar del dispensador , si esta fria no sera consumida.  </span>
+						</li>
+
+						<li class="list-group-item"><span class="badge">1</span> <strong>Arroz: porcion media</strong> 
+							<br><span> Notas: </span>
+						</li>
+					</ul>
+
+					<button type="button" class="btn btn-primary">  Pedido Terminado </button>	
+
+				  </div>
+				</div>		
+
+			</article>
+			-->
+			
+
+		</section>
+		
+
+	</div>
+	
+
+	
+</body>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+
+  <script type="text/javascript">
+
+  	 ws = io.connect('/');
+
+  	ws.on('pedido', function (pedido){
+  		var nromesa = pedido.mesa;
+  		var contenido = '<article class="col-lg-6"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title text-center text-center">Mesa '+nromesa+'</h3></div><div class="panel-body"><ul class="list-group">';
+
+  		$.each( pedido, function( index , objeto ) {
+  			//pto, cantidad, notas , mesa
+  			//console.log( objeto.pto + objeto.cantidad + objeto.notas );
+  			if(objeto.pto){
+  			contenido+='<li class="list-group-item"><span class="badge">'+objeto.cantidad+'</span> <strong>'+objeto.pto+'</strong><br><span>Notas: '+objeto.notas+'</span></li>';
+  			}
+  		});
+
+  		contenido+='</ul><button type="button" class="btn btn-primary"> Pedido Terminado</button></div></div></article>';
+  		
+  		$('section.row').append(contenido);
+  	});
+
+
+  </script>
+</html>

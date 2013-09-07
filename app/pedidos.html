@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title> Restraunt 0.0.1 </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+
+  </head>
+
+  <body>
+
+    <div class="container text-center">
+      
+      <a id="atras" href="#" style="display:none;" class="btn btn-primary pull-right"> Volver atras</a>
+      <hr>
+      <section class="row">
+
+        <div class="col-lg-12">
+          
+       <div class="list-group">
+       	
+         <a id="btn_pedido" href="#" class="list-group-item list ">
+           <h4 class="list-group-item-heading">Realizar pedido</h4>
+           <p class="list-group-item-text"> Click para a realizar un pedido. </p>
+         </a>
+
+         <a href="#" class="list-group-item">
+           <h4 class="list-group-item-heading">Modificar pedido</h4>
+           <p class="list-group-item-text"> agrega o quita partes de un pedido. </p>
+         </a>
+
+         <a href="#" class="list-group-item">
+           <h4 class="list-group-item-heading">Cancelar pedido</h4>
+           <p class="list-group-item-text"> Cancela un pedido. </p>
+         </a>
+
+       </div>
+
+        </div>
+
+      </section>
+      
+
+      <section id="sect_pedido" class="col-lg-12" style="display:none;" >
+
+        <div class="thumbnail" style="padding:20px;">
+          <div class="caption">
+            <h3>Mesa Nro:</h3>
+            <p> <input id="txt_mesa" class="form-control text-center input-lg" type="number"></p>
+          </div>
+        </div>
+        
+
+        <table tabindex='1' class="table table-hover">
+        <thead>
+          <tr class="no">
+            <th></th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Comentarios</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr id="tr_total" class="no" >       
+            <td colspan="4">    
+              <h2> Total: 40.000</h2>
+            </td> 
+          </tr>          
+          <tr class="no">       
+            <td colspan="4">    
+            <a id="btn_factura" class="btn btn-primary btn-lg"> Ver factura </a> 
+            </td> 
+          </tr>
+          <tr id="tr_temrinar" class="no">       
+            <td colspan="2">    
+            <a id="btn_mofpedido" class="btn btn-default btn-lg"> Modificar pedido</a> 
+            </td>      
+            <td colspan="2">    
+            <a id="btn_terminarpedido" class="btn btn-success btn-lg"> Terminar pedido</a> 
+            </td> 
+          </tr>
+
+        </tbody>        
+      </table>
+
+      <article id="filto">
+        <div class="input-group">
+          <span class="input-group-addon">Filtro</span>
+          <input type="text" id="txt_pto" class="form-control input-lg" placeholder="Ingrese el producto o la categoria">
+        </div>
+
+        <ul id="lista_productos" class="list-group">
+
+          <a id="pto_n1" href="" class="list-group-item list ">
+           <h4 class="list-group-item-heading">Sopas: </h4>         
+          <p class="list-group-item-text"> Sopa de pollo. </p>     
+         </a>
+          <a id="pto_n2" href="" class="list-group-item list ">
+           <h4 class="list-group-item-heading">Sopas: </h4>
+           <p class="list-group-item-text"> Sopa de pescado. </p>
+         </a>
+          <a id="pto_n3" href="" class="list-group-item list ">
+           <h4 class="list-group-item-heading">Sopas: </h4>
+           <p class="list-group-item-text"> Sopa de arroz. </p>
+         </a>
+          <a id="pto_n4" href="" class="list-group-item list ">
+           <h4 class="list-group-item-heading">Postres: </h4>
+           <p class="list-group-item-text"> Chocolate. </p>
+         </a>
+          <a id="pto_n4" href="" class="list-group-item list ">
+           <h4 class="list-group-item-heading">Postres: </h4>
+           <p class="list-group-item-text"> Pastel. </p>
+         </a>
+          <a id="pto_n5" href="" class="list-group-item list ">
+           <h4 class="list-group-item-heading">Refrescos: </h4>
+           <p class="list-group-item-text"> Cocacola. </p>
+         </a>
+      </article>
+
+      </section>
+      
+      <!--
+      <footer class="footer">
+        <p>&copy; Company 20233</p>
+      </footer>
+      --> 
+
+    </div> <!-- /container -->
+
+  </body>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" src="js/filter.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+  <script type="text/javascript">
+
+  var  ws = io.connect('/');
+
+$(document).ready(function(){
+
+  $('#tr_total,#tr_temrinar').hide();
+
+    console.log( $('.no:first').attr('data-tr') )
+
+  $('#btn_factura').click(function(){
+    var ptos = $("tr[class!='no']").text();
+    var mesa = $('#txt_mesa').val();
+
+    if (ptos&&mesa) {
+       $("#btn_factura,#filto,#atras,.thumbnail").hide();
+       $('#tr_total,#tr_temrinar').show();
+    }else{
+      alert("Faltan datos, verifique que ingreso el nro de mesa.");
+    }
+  });
+
+  $('#btn_mofpedido').click(function(){
+    $('#btn_factura,#filto,#atras,.thumbnail').show();
+    $('#tr_total,#tr_temrinar').hide();
+  });
+
+
+  function mostrar(item){
+    $('.list-group:first').hide();
+    item.fadeIn();
+    $('#atras').fadeIn();
+  }
+  $('#atras').click(function(){
+    $('.list-group:first').show();
+    $('section').hide();
+    $('section:first').fadeIn();
+    $('#atras').hide();
+  });
+
+  /*/ SECTION REALIZAR PEDIDO ====================================/*/
+
+  var pedido = {}; 
+
+  function each(){
+    $("tr[class!='no']").each(function (index) {
+        //console.log( "i1: "+index ); 
+        var id = $(this).attr("class");
+        var pto, cantidad, notas;
+        $(this).children("td").each(function (index2) {
+             //console.log( "idooos: "+index2 ); 
+             switch (index2) {
+              case 1:
+                pto = $(this).text();
+              break;
+              case 2:
+                cantidad = $(this).children("input").val(); 
+              break;
+              case 3:
+                notas = $(this).children("input").val(); 
+              break;
+            }                        
+          })
+
+        pedido[id] = {pto:pto, cantidad:cantidad, notas:notas};
+
+      })
+  }
+
+  $('#btn_pedido').click(function(){
+    mostrar($('#sect_pedido'));    
+  });
+  
+  $('#lista_productos').click(function(event){
+    event.preventDefault();
+  });
+
+  $('#lista_productos a').click(function(){
+
+    text = $(this).text().replace(/ /g,'').replace(/\n/g, ""); //html
+    id =  $(this).attr("id");
+
+    if( pedido[id] ){
+      alert("Esto ya lo insertaste antes.");
+    }
+    else
+    {
+      $('.table').focus();
+      $('tbody').prepend('<tr class='+id+'><td><button class="btn btn-danger"> Eliminar </button></td><td class="pto">'+text+'</td><td> <input type="number"  class="form-control cantidad"> </td> <td> <input type="text" class="form-control notas" placeholder="Agregue una nota."></td> </tr>');
+       pedido[id]="exits";
+
+    } //else
+
+   
+
+    $(".btn-danger").click(function(){
+      var id = $(this).parents("tr").attr("class");
+      $(this).parents("tr").remove();
+
+      delete pedido[id];
+
+      //console.log( $(this).parents("tr").attr("class") )
+      //console.log( pedido[id] )
+     
+    }) //$(".btn-danger")
+
+  }) //$('#lista_productos a')
+
+  $('#btn_terminarpedido').click(function(){
+    // se manda pedido[id] = {pto, cantidad, notas}; y pedido.mesa
+
+    each();
+    var ptos = $("tr[class!='no']").text();
+    var mesa = $('#txt_mesa').val();
+    if (ptos&&mesa) {
+      pedido.mesa = mesa;
+      ws.emit('pedido', pedido); 
+      window.location.href = "pedidos.html";   
+    }else{
+      alert("Faltan datos, verifique que ingreso el nro de mesa.");
+    }
+  });
+
+  $('#lista_productos').liveFilter('#txt_pto', 'a', {
+      //filterChildSelector: 'a'
+    },function(){
+      $('#txt_pto').focus();
+  });
+
+  /*/ END REALIZAR PEDIDO ========================================/*/
+
+
+});
+
+  </script>
+</html>
